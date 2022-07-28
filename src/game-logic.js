@@ -23,6 +23,18 @@ export function ship(name, length) {
   throw new Error('length must be type number');
 }
 
-export function silly() {
-  // Placeholder
+export function gameboard() {
+  return {
+    // Stores locations of ship in obj
+    shipLocations: {},
+
+    // Places ship if it doesn't overlap
+    placeShip(cordX, cordY, vessel) {
+      const vesselLocations = [];
+      for (let i = cordX; i < cordX + vessel.length; i += 1) {
+        vesselLocations.push([i, cordY]);
+      }
+      this.shipLocations[`${vessel.name}`] = vesselLocations;
+    },
+  };
 }
