@@ -38,7 +38,11 @@ export function gameboard() {
       );
 
       if (this.checkNoOverFlow(newShipPositions, orientation)) {
-        this.shipLocations[`${vessel.name}`] = newShipPositions;
+        if (this.isSpaceAvailable(newShipPositions)) {
+          this.shipLocations[`${vessel.name}`] = newShipPositions;
+        } else {
+          throw new Error('Error: space already occupied by existing ship');
+        }
       } else {
         throw new Error('Error: placement is outside grid');
       }
@@ -104,6 +108,13 @@ export function gameboard() {
         return true;
       });
       return validity;
+    },
+
+    // Returns true if space for each ship coordinate is available
+    isSpaceAvailable(newShipCords) {
+      return newShipCords.every((element) =>
+        this.checkCordVacant(element[0], element[1])
+      );
     },
   };
 }

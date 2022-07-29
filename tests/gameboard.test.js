@@ -29,17 +29,6 @@ test('vessel of length 5 is stored in gameboard', () => {
   ]);
 });
 
-test('board stores multiple ships', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(1, 9, ship('battleship', 4), 'horizontal');
-  testBoard.placeShip(1, 9, ship('cruiser', 3), 'horizontal');
-  testBoard.placeShip(1, 9, ship('destroyer', 2), 'horizontal');
-  testBoard.placeShip(1, 9, ship('submarine', 1), 'horizontal');
-
-  expect(Object.keys(testBoard.shipLocations).length).toBe(5);
-});
-
 test('createHorizontalArray works (1)', () => {
   const testBoard = gameboard();
   expect(
@@ -90,17 +79,6 @@ test('placeShip stores coordinates of single new vessel', () => {
   testBoard.placeShip(4, 1, ship('cruiser', 3), 'horizontal');
 
   expect(Object.values(testBoard.shipLocations).length).toBe(1);
-});
-
-test('placeShip stores coordinates of all new vessels', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(1, 9, ship('battleship', 4), 'horizontal');
-  testBoard.placeShip(1, 9, ship('cruiser', 3), 'horizontal');
-  testBoard.placeShip(1, 9, ship('destroyer', 2), 'horizontal');
-  testBoard.placeShip(1, 9, ship('submarine', 1), 'horizontal');
-
-  expect(Object.values(testBoard.shipLocations).length).toBe(5);
 });
 
 test('occupiedCords method returns correct array', () => {
@@ -242,5 +220,54 @@ test('placeShip rejects ships outside the grid vertically', () => {
   const testBoard = gameboard();
   expect(() => {
     testBoard.placeShip(6, 8, ship('carrier', 5), 'vertical');
+  }).toThrow();
+});
+
+test('isSpaceAvailable returns true with available spaces', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
+  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
+
+  expect(
+    testBoard.isSpaceAvailable([
+      [1, 1],
+      [2, 1],
+      [3, 1],
+    ])
+  ).toBe(true);
+});
+
+test('isSpaceAvailable returns false with occupied spaces', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
+  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
+
+  expect(
+    testBoard.isSpaceAvailable([
+      [6, 4],
+      [6, 5],
+      [6, 6],
+    ])
+  ).toBe(false);
+});
+
+test('board stores multiple ships', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
+  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
+  testBoard.placeShip(7, 2, ship('cruiser', 3), 'horizontal');
+  testBoard.placeShip(8, 9, ship('destroyer', 2), 'horizontal');
+  testBoard.placeShip(2, 3, ship('submarine', 1), 'horizontal');
+
+  expect(Object.keys(testBoard.shipLocations).length).toBe(5);
+});
+
+test('throws error if new ship overlaps existing ship', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
+  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
+
+  expect(() => {
+    testBoard.placeShip(7, 4, ship('cruiser', 3), 'vertical');
   }).toThrow();
 });
