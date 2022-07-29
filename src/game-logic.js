@@ -51,5 +51,16 @@ export function gameboard() {
       }
       return allCordinates.flat();
     },
+
+    // Returns true if single co-ordinate is vacant
+    checkCordVacant(cordX, cordY) {
+      const validity = this.occupiedCords().every((element) => {
+        if (element[0] === cordX && element[1] === cordY) {
+          return false;
+        }
+        return true;
+      });
+      return validity;
+    },
   };
 }

@@ -101,3 +101,25 @@ test('occupiedCords method returns correct array', () => {
     [1, 9],
   ]);
 });
+
+test('checkCordVacant returns true if square vacant ', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5));
+  testBoard.placeShip(2, 8, ship('battleship', 4));
+  testBoard.placeShip(7, 2, ship('cruiser', 3));
+  testBoard.placeShip(8, 9, ship('destroyer', 2));
+  testBoard.placeShip(2, 3, ship('submarine', 1));
+
+  expect(testBoard.checkCordVacant(6, 8)).toBe(true);
+});
+
+test('checkCordVacant returns false if square occupied ', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5));
+  testBoard.placeShip(2, 8, ship('battleship', 4));
+  testBoard.placeShip(7, 2, ship('cruiser', 3));
+  testBoard.placeShip(8, 9, ship('destroyer', 2));
+  testBoard.placeShip(2, 3, ship('submarine', 1));
+
+  expect(testBoard.checkCordVacant(8, 9)).toBe(false);
+});
