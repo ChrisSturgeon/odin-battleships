@@ -29,14 +29,14 @@ test('vessel of length 5 is stored in gameboard', () => {
   ]);
 });
 
-test('does not allow overlapping of ships', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5));
+// test('does not allow overlapping of ships', () => {
+//   const testBoard = gameboard();
+//   testBoard.placeShip(5, 5, ship('carrier', 5));
 
-  expect(() => {
-    testBoard.placeShip(1, 9, ship('battleship', 4));
-  }).toThrow();
-});
+//   expect(() => {
+//     testBoard.placeShip(1, 9, ship('battleship', 4));
+//   }).toThrow();
+// });
 
 test('board stores multiple ships', () => {
   const testBoard = gameboard();
@@ -47,4 +47,57 @@ test('board stores multiple ships', () => {
   testBoard.placeShip(1, 9, ship('submarine', 1));
 
   expect(Object.keys(testBoard.shipLocations).length).toBe(5);
+});
+
+test('returns position array works (1)', () => {
+  const testBoard = gameboard();
+
+  expect(
+    testBoard.createPositionArray(4, 9, ship('cruiser', 3))
+  ).toStrictEqual = [
+    [4, 9],
+    [5, 0],
+    [6, 9],
+  ];
+});
+
+test('returns position array works (2)', () => {
+  const testBoard = gameboard();
+
+  expect(
+    testBoard.createPositionArray(6, 4, ship('destroyer', 2))
+  ).toStrictEqual = [
+    [6, 4],
+    [7, 4],
+  ];
+});
+
+test('placeShip stores coordinates of single new vessel', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(4, 1, ship('cruiser', 3));
+
+  expect(Object.values(testBoard.shipLocations).length).toBe(1);
+});
+
+test('placeShip stores coordinates of all new vessels', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(5, 5, ship('carrier', 5));
+  testBoard.placeShip(1, 9, ship('battleship', 4));
+  testBoard.placeShip(1, 9, ship('cruiser', 3));
+  testBoard.placeShip(1, 9, ship('destroyer', 2));
+  testBoard.placeShip(1, 9, ship('submarine', 1));
+
+  expect(Object.values(testBoard.shipLocations).length).toBe(5);
+});
+
+test('occupiedCords method returns correct array', () => {
+  const testBoard = gameboard();
+  testBoard.placeShip(1, 1, ship('destroyer', 2));
+  testBoard.placeShip(1, 9, ship('submarine', 1));
+
+  expect(testBoard.occupiedCords()).toStrictEqual([
+    [1, 1],
+    [2, 1],
+    [1, 9],
+  ]);
 });

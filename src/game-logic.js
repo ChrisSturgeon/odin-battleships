@@ -28,13 +28,28 @@ export function gameboard() {
     // Stores locations of ship in obj
     shipLocations: {},
 
-    // Places ship if it doesn't overlap
+    // Enters new ship into shipLocations object
     placeShip(cordX, cordY, vessel) {
-      const vesselLocations = [];
+      const newShipPositions = this.createPositionArray(cordX, cordY, vessel);
+      this.shipLocations[`${vessel.name}`] = newShipPositions;
+    },
+
+    // Creates positions of requested new ship
+    createPositionArray(cordX, cordY, vessel) {
+      const requestedLocations = [];
       for (let i = cordX; i < cordX + vessel.length; i += 1) {
-        vesselLocations.push([i, cordY]);
+        requestedLocations.push([i, cordY]);
       }
-      this.shipLocations[`${vessel.name}`] = vesselLocations;
+      return requestedLocations;
+    },
+
+    // Returns array of all occupied coordinates
+    occupiedCords() {
+      const allCordinates = [];
+      for (let i = 0; i < Object.values(this.shipLocations).length; i += 1) {
+        allCordinates.push(Object.values(this.shipLocations)[i]);
+      }
+      return allCordinates.flat();
     },
   };
 }
