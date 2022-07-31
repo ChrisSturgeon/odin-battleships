@@ -13,7 +13,3 @@ export function ship(length) {
     },
   };
 }
-
-export function dummy() {
-  // Happy?
-}

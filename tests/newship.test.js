@@ -1,6 +1,4 @@
 import { expect } from 'expect';
-import { TestEnvironment } from 'jest-environment-node';
-
 import { ship } from '../src/factories/ship';
 
 test('hit method records a single hit', () => {
