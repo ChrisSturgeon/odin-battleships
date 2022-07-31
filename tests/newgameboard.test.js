@@ -162,3 +162,36 @@ test('newShip method throws error if a coordinate is already occupied', () => {
     testboard.newShip(5, 6, 4, 'vertical');
   }).toThrow();
 });
+
+test('receiveAttack method finds triggers ship hit when ship at given coordinate', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+  testboard.receieveAtttack([5, 5]);
+
+  expect(testboard.ships[0].hitLocations).toStrictEqual([[5, 5]]);
+});
+
+test('receiveAttack method records missed shots', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+  testboard.receieveAtttack([1, 1]);
+  testboard.receieveAtttack([10, 10]);
+  testboard.receieveAtttack([8, 9]);
+
+  expect(testboard.missedShots).toStrictEqual([
+    [1, 1],
+    [10, 10],
+    [8, 9],
+  ]);
+});
+
+test('ships return as sunk once length has been reached', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+  testboard.receieveAtttack([5, 5]);
+  testboard.receieveAtttack([6, 5]);
+  testboard.receieveAtttack([7, 5]);
+  testboard.receieveAtttack([8, 5]);
+
+  expect(testboard.ships[0].isSunk()).toBe(true);
+});

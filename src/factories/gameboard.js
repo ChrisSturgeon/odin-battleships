@@ -3,8 +3,10 @@ import { ship } from './ship';
 export function gameboard() {
   return {
     ships: [],
+    missedShots: [],
 
-    // Makes new ship object, sets coordinates and stores in gameboard ships array.
+    // Makes new ship object, sets coordinates, validates coordinates
+    // and stores in gameboard ships array if within grid
     newShip(length, xCOORD, yCOORD, orientation) {
       const newShip = ship(length);
       newShip.coordinates = this.makeShipCoordinates(
@@ -19,12 +21,6 @@ export function gameboard() {
       } else {
         throw new Error('Error: invalid placement');
       }
-    },
-
-    receiveAttack(COORD) {
-      const xCOORD = COORD[0];
-      const yCOORD = COORD[1];
-      return this.ships[1].positions[1][1];
     },
 
     // Returns true if given coordinates are both within the grid, and all coordinates are available
@@ -102,6 +98,26 @@ export function gameboard() {
       return coordinates.every((coordinate) =>
         this.isCoordAvailable([coordinate[0], coordinate[1]])
       );
+    },
+
+    // Takes single coordinates array, finds relevant ship and records hit or miss.
+    receieveAtttack(singleCOORD) {
+      let didHitShip = false;
+      const xCOORD = singleCOORD[0];
+      const yCOORD = singleCOORD[1];
+
+      this.ships.forEach((ship) => {
+        ship.coordinates.forEach((coordinate) => {
+          if (coordinate[0] === xCOORD && coordinate[1] === yCOORD) {
+            ship.hit(singleCOORD);
+            didHitShip = true;
+          }
+        });
+      });
+
+      if (didHitShip === false) {
+        this.missedShots.push(singleCOORD);
+      }
     },
   };
 }
