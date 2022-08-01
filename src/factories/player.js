@@ -39,7 +39,6 @@ export function player() {
           this.firedShots.push(coords);
           console.log(this.firedShots.length);
         } else {
-          console.log('repeat shot');
           this.randomFire(board);
         }
       } else {
