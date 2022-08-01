@@ -119,5 +119,9 @@ export function gameboard() {
         this.missedShots.push(singleCOORD);
       }
     },
+
+    areShipsSunk() {
+      return this.ships.every((ship) => ship.isSunk());
+    },
   };
 }

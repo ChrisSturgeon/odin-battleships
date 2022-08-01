@@ -195,3 +195,33 @@ test('ships return as sunk once length has been reached', () => {
 
   expect(testboard.ships[0].isSunk()).toBe(true);
 });
+
+test('are ships sunk returns true if all ships on the board have been sunk', () => {
+  const testboard = gameboard();
+  testboard.newShip(2, 1, 1, 'horizontal');
+  testboard.newShip(2, 5, 5, 'vertical');
+  testboard.newShip(2, 7, 7, 'vertical');
+
+  testboard.receieveAtttack([1, 1]);
+  testboard.receieveAtttack([2, 1]);
+  testboard.receieveAtttack([5, 5]);
+  testboard.receieveAtttack([5, 6]);
+  testboard.receieveAtttack([7, 7]);
+  testboard.receieveAtttack([7, 8]);
+
+  expect(testboard.areShipsSunk()).toBe(true);
+});
+
+test('are ships sunk returns false if not all ships on the board have been sunk', () => {
+  const testboard = gameboard();
+  testboard.newShip(2, 1, 1, 'horizontal');
+  testboard.newShip(2, 5, 5, 'vertical');
+  testboard.newShip(2, 7, 7, 'vertical');
+
+  testboard.receieveAtttack([1, 1]);
+  testboard.receieveAtttack([2, 1]);
+  testboard.receieveAtttack([5, 5]);
+  testboard.receieveAtttack([5, 6]);
+
+  expect(testboard.areShipsSunk()).toBe(false);
+});
