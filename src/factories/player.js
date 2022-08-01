@@ -21,29 +21,29 @@ export function player() {
     // Compares input coordinates against previous shots and returns true if they're original.
     isOriginalShot(coords) {
       return this.firedShots.every((shot) => {
-        if (coords[0] !== shot[0] && coords[1] !== shot[1]) {
-          return true;
+        if (coords[0] === shot[0] && coords[1] === shot[1]) {
+          return false;
         }
-        return false;
+        return true;
       });
     },
 
     // Fires random shot upon input board
     randomFire(board) {
       const coords = this.makeRandomCoords();
+      console.log(coords);
 
-      if (this.firedShots.length > 0) {
+      if (this.firedShots.length >= 0 && this.firedShots.length <= 99) {
         if (this.isOriginalShot(coords)) {
           board.receieveAtttack(coords);
           this.firedShots.push(coords);
-        } else if (this.firedShots.length < 100) {
-          this.randomFire();
+          console.log(this.firedShots.length);
         } else {
-          throw new Error('Maximum shots reached');
+          console.log('repeat shot');
+          this.randomFire(board);
         }
       } else {
-        board.receieveAtttack(coords);
-        this.firedShots.push(coords);
+        throw new Error('Board covered!');
       }
     },
 
