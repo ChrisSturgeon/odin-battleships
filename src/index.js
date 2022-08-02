@@ -9,7 +9,6 @@ import {
 import { gameboard } from './factories/gameboard';
 import { player } from './factories/player';
 
-const gameOver = false;
 let shipsPlaced = false;
 
 const playerA = player();
@@ -35,6 +34,8 @@ makeBoard('B', 'board2');
 renderShips('B', boardB);
 
 function checkGameOver() {
+  console.log(boardA.areShipsSunk(), boardB.areShipsSunk());
+  console.log(boardB);
   if (boardA.areShipsSunk()) {
     displayGameOver('Player A');
   }
