@@ -114,6 +114,11 @@ export function shipHover() {
         const cell = document.getElementById(`A-${coord[0]}-${coord[1]}`);
         cell.style.backgroundColor = 'yellow';
       });
+    } else {
+      const cell = document.getElementById(
+        `A-${coordinates[1]}-${coordinates[2]}`
+      );
+      cell.style.cursor = 'not-allowed';
     }
   }
 }
@@ -138,6 +143,11 @@ export function unHover() {
         const cell = document.getElementById(`A-${coord[0]}-${coord[1]}`);
         cell.style.backgroundColor = 'white';
       });
+    } else {
+      const cell = document.getElementById(
+        `A-${coordinates[1]}-${coordinates[2]}`
+      );
+      cell.style.cursor = 'default';
     }
   }
 }
@@ -159,5 +169,3 @@ export function clickNewShip() {
     }
   }
 }
-
-newShipBtn.addEventListener('click', makeNewShip);
