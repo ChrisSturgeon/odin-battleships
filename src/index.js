@@ -10,6 +10,21 @@ import { gameboard } from './factories/gameboard';
 import { player } from './factories/player';
 
 let shipsPlaced = false;
+let shipLengthCounter = 5;
+
+let rotation = 'horizontal';
+const rotationBox = document.getElementById('rotation');
+rotationBox.textContent = rotation;
+const rotationBtn = document.getElementById('rotationBtn');
+rotationBtn.addEventListener('click', () => {
+  if (rotation === 'horizontal') {
+    rotation = 'vertical';
+    rotationBox.textContent = rotation;
+  } else {
+    rotation = 'horizontal';
+    rotationBox.textContent = rotation;
+  }
+});
 
 const playerA = player();
 const boardA = gameboard();
@@ -37,11 +52,11 @@ function checkGameOver() {
   console.log(boardA.areShipsSunk(), boardB.areShipsSunk());
   console.log(boardB);
   if (boardA.areShipsSunk()) {
-    displayGameOver('Player A');
+    displayGameOver('Player B');
   }
 
   if (boardB.areShipsSunk()) {
-    displayGameOver('Player B');
+    displayGameOver('Player A');
   }
 }
 
@@ -78,5 +93,71 @@ function makeNewShip() {
 }
 
 const newShipBtn = document.getElementById('newShipBtn');
+
+export function shipHover() {
+  if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
+    // console.log('dog');
+    const coordinates = this.id.split('-');
+    // console.log(coordinates);
+    const square = document.getElementById(this.id);
+    // square.style.backgroundColor = 'pink';
+
+    const potentialCords = boardA.makeShipCoordinates(
+      Number(coordinates[1]),
+      Number(coordinates[2]),
+      boardA.newShipLength,
+      rotation
+    );
+
+    if (boardA.isValidPosition(potentialCords, rotation)) {
+      potentialCords.forEach((coord) => {
+        const cell = document.getElementById(`A-${coord[0]}-${coord[1]}`);
+        cell.style.backgroundColor = 'yellow';
+      });
+    }
+  }
+}
+
+export function unHover() {
+  if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
+    // console.log('dog');
+    const coordinates = this.id.split('-');
+    // console.log(coordinates);
+    const square = document.getElementById(this.id);
+    // square.style.backgroundColor = 'pink';
+
+    const potentialCords = boardA.makeShipCoordinates(
+      Number(coordinates[1]),
+      Number(coordinates[2]),
+      boardA.newShipLength,
+      rotation
+    );
+
+    if (boardA.isValidPosition(potentialCords, rotation)) {
+      potentialCords.forEach((coord) => {
+        const cell = document.getElementById(`A-${coord[0]}-${coord[1]}`);
+        cell.style.backgroundColor = 'white';
+      });
+    }
+  }
+}
+
+export function clickNewShip() {
+  if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
+    const coordinates = this.id.split('-');
+    boardA.newShip(
+      boardA.newShipLength,
+      Number(coordinates[1]),
+      Number(coordinates[2]),
+      rotation
+    );
+
+    renderShips('A', boardA);
+
+    if (boardA.ships.length >= 5) {
+      shipsPlaced = true;
+    }
+  }
+}
 
 newShipBtn.addEventListener('click', makeNewShip);

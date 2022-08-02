@@ -4,6 +4,7 @@ export function gameboard() {
   return {
     ships: [],
     missedShots: [],
+    newShipLength: 5,
 
     // Makes new ship object, sets coordinates, validates coordinates
     // and stores in gameboard ships array if within grid
@@ -18,8 +19,9 @@ export function gameboard() {
 
       if (this.isValidPosition(newShip.coordinates, orientation)) {
         this.ships.push(newShip);
+        this.newShipLength -= 1;
       } else {
-        throw new Error('Error: invalid placement');
+        console.log('Invalid placement!');
       }
     },
 
@@ -120,6 +122,7 @@ export function gameboard() {
       }
     },
 
+    // Returns true if all ships on the gameboard have been sunk
     areShipsSunk() {
       return this.ships.every((ship) => ship.isSunk());
     },

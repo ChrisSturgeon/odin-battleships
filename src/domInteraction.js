@@ -1,4 +1,4 @@
-import { gameLoop } from './index';
+import { clickNewShip, gameLoop, shipHover, unHover } from './index';
 
 export function makeBoard(prefix, id) {
   const container = document.getElementById(`${id}`);
@@ -13,6 +13,9 @@ export function makeBoard(prefix, id) {
       coord.classList.add('coord');
       coord.setAttribute('id', `${prefix}-${x}-${i}`);
       coord.setAttribute('value', `${prefix}-${x}-${i}`);
+      coord.addEventListener('mouseover', shipHover);
+      coord.addEventListener('mouseout', unHover);
+      coord.addEventListener('click', clickNewShip);
       coord.addEventListener('click', gameLoop);
       boardBox.appendChild(coord);
     }
@@ -53,8 +56,4 @@ export function displayGameOver(player) {
   const boards = document.getElementById('boards');
   boards.innerHTML = '';
   boards.innerText = `${player} is the bloody winner!`;
-}
-
-export function placeNewShip() {
-  return [1, 10, 7, 'vertical'];
 }

@@ -141,7 +141,7 @@ test('isSpaceAvailable returns false if a coordinate is already occupied', () =>
     testboard.isSpaceAvailable([
       [6, 4],
       [6, 5],
-      [6, 7],
+      [6, 6],
     ])
   ).toBe(false);
 });
