@@ -1,3 +1,5 @@
+import { gameLoop } from './index';
+
 export function makeBoard(prefix, id) {
   const container = document.getElementById(`${id}`);
   const boardBox = document.createElement('div');
@@ -10,6 +12,8 @@ export function makeBoard(prefix, id) {
       const coord = document.createElement('div');
       coord.classList.add('coord');
       coord.setAttribute('id', `${prefix}-${x}-${i}`);
+      coord.setAttribute('value', `${prefix}-${x}-${i}`);
+      coord.addEventListener('click', gameLoop);
       boardBox.appendChild(coord);
     }
   }
@@ -42,4 +46,15 @@ export function renderAttacks(prefix, board) {
       square.style.backgroundColor = 'green';
     });
   });
+}
+
+export function displayGameOver(player) {
+  console.log(`${player} is the bloody winner!`);
+  const boards = document.getElementById('boards');
+  boards.innerHTML = '';
+  boards.innerText = `${player} is the bloody winner!`;
+}
+
+export function placeNewShip() {
+  return [1, 10, 7, 'vertical'];
 }

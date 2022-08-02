@@ -31,13 +31,11 @@ export function player() {
     // Fires random shot upon input board
     randomFire(board) {
       const coords = this.makeRandomCoords();
-      console.log(coords);
 
       if (this.firedShots.length >= 0 && this.firedShots.length <= 99) {
         if (this.isOriginalShot(coords)) {
           board.receieveAtttack(coords);
           this.firedShots.push(coords);
-          console.log(this.firedShots.length);
         } else {
           this.randomFire(board);
         }
