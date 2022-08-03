@@ -129,7 +129,6 @@ export function newGame() {
   boardB.randomShip();
   boardB.randomShip();
   boardB.randomShip();
-  renderShips('B', boardB);
 }
 
 const resetBtn = document.getElementById('resetBtn');
