@@ -7,6 +7,7 @@ import {
   displayGameOver,
   wipeBoards,
   updateStatus,
+  updateScores,
 } from './domInteraction';
 import { gameboard } from './factories/gameboard';
 import { player } from './factories/player';
@@ -14,50 +15,44 @@ import { player } from './factories/player';
 let shipsPlaced = false;
 
 let rotation = 'horizontal';
-const rotationBox = document.getElementById('rotation');
-rotationBox.textContent = rotation;
-const rotationBtn = document.getElementById('rotationBtn');
-rotationBtn.addEventListener('click', () => {
+
+// Toggles new ship orientation as horizontal or vertical
+export function rotateShip() {
   if (rotation === 'horizontal') {
     rotation = 'vertical';
-    rotationBox.textContent = rotation;
   } else {
     rotation = 'horizontal';
-    rotationBox.textContent = rotation;
   }
-});
+}
 
 const playerA = player();
-const boardA = gameboard();
-
-makeBoard('A', 'board1');
-renderShips('A', boardA);
-
 const playerB = player();
+const boardA = gameboard();
 const boardB = gameboard();
 
-boardB.randomShip();
-boardB.randomShip();
-boardB.randomShip();
-boardB.randomShip();
-boardB.randomShip();
-// boardB.newShip(2, 8, 9, 'horizontal');
-// boardB.newShip(3, 7, 2, 'horizontal');
-// boardB.newShip(4, 2, 8, 'horizontal');
-// boardB.newShip(5, 5, 5, 'horizontal');
+// makeBoard('A', 'board1');
+// renderShips('A', boardA);
 
-makeBoard('B', 'board2');
-renderShips('B', boardB);
+// boardB.randomShip();
+// boardB.randomShip();
+// boardB.randomShip();
+// boardB.randomShip();
+// boardB.randomShip();
 
-updateStatus(boardA.newShipLength);
+// makeBoard('B', 'board2');
+// renderShips('B', boardB);
 
 function checkGameOver() {
   if (boardA.areShipsSunk()) {
-    displayGameOver('Player B');
+    displayGameOver('The Computer is');
+    playerB.score += 1;
+    shipsPlaced = false;
   }
 
   if (boardB.areShipsSunk()) {
-    displayGameOver('Player A');
+    displayGameOver('You are');
+    playerA.score += 1;
+    shipsPlaced = false;
   }
 }
 
@@ -78,53 +73,16 @@ export function gameLoop() {
   }
 }
 
-export function shipHover() {
-  if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
-    const coordinates = this.id.split('-');
-    const potentialCords = boardA.makeShipCoordinates(
-      Number(coordinates[1]),
-      Number(coordinates[2]),
-      boardA.newShipLength,
-      rotation
-    );
-
-    if (boardA.isValidPosition(potentialCords, rotation)) {
-      potentialCords.forEach((coord) => {
-        const cell = document.getElementById(`A-${coord[0]}-${coord[1]}`);
-        cell.style.backgroundColor = 'yellow';
-      });
-    } else {
-      const cell = document.getElementById(
-        `A-${coordinates[1]}-${coordinates[2]}`
-      );
-      cell.style.cursor = 'not-allowed';
-    }
-  }
+export function getBoardA() {
+  return boardA;
 }
 
-export function unHover() {
-  if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
-    const coordinates = this.id.split('-');
+export function getShipsPlaced() {
+  return shipsPlaced;
+}
 
-    const potentialCords = boardA.makeShipCoordinates(
-      Number(coordinates[1]),
-      Number(coordinates[2]),
-      boardA.newShipLength,
-      rotation
-    );
-
-    if (boardA.isValidPosition(potentialCords, rotation)) {
-      potentialCords.forEach((coord) => {
-        const cell = document.getElementById(`A-${coord[0]}-${coord[1]}`);
-        cell.style.backgroundColor = 'white';
-      });
-    } else {
-      const cell = document.getElementById(
-        `A-${coordinates[1]}-${coordinates[2]}`
-      );
-      cell.style.cursor = 'default';
-    }
-  }
+export function getRotation() {
+  return rotation;
 }
 
 export function clickNewShip() {
@@ -148,9 +106,13 @@ export function clickNewShip() {
 
 export function newGame() {
   wipeBoards();
+  updateScores(playerA, playerB);
   makeBoard('A', 'board1');
   makeBoard('B', 'board2');
   shipsPlaced = false;
+
+  playerA.firedShots = [];
+  playerB.firedShots = [];
 
   boardA.ships = [];
   boardA.newShipLength = 5;
@@ -173,4 +135,4 @@ export function newGame() {
 const resetBtn = document.getElementById('resetBtn');
 resetBtn.addEventListener('click', newGame);
 
-console.log(boardA.randomCoordinates());
+newGame();

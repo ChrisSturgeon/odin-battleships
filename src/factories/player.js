@@ -2,6 +2,7 @@ export function player() {
   return {
     // Stores coordinates of all fired shots in array
     firedShots: [],
+    score: 0,
 
     // Triggers receieveAttack function on on given board with provided coordinates
     fire(board, coords) {
