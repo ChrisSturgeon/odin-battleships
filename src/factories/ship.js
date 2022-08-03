@@ -6,7 +6,7 @@ export function ship(length) {
       this.hitLocations.push(coords);
     },
     isSunk() {
-      if (this.hitLocations.length === this.length) {
+      if (this.hitLocations.length >= this.length) {
         return true;
       }
       return false;

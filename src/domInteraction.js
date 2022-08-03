@@ -1,4 +1,10 @@
-import { clickNewShip, gameLoop, shipHover, unHover } from './index';
+import {
+  clickNewShip,
+  gameLoop,
+  shipHover,
+  unHover,
+  getShipLength,
+} from './index';
 
 export function makeBoard(prefix, id) {
   const container = document.getElementById(`${id}`);
@@ -52,8 +58,40 @@ export function renderAttacks(prefix, board) {
 }
 
 export function displayGameOver(player) {
-  console.log(`${player} is the bloody winner!`);
-  const boards = document.getElementById('boards');
-  boards.innerHTML = '';
-  boards.innerText = `${player} is the bloody winner!`;
+  const infoBox = document.getElementById('info');
+  infoBox.textContent = `${player} is the winner!`;
+}
+
+export function wipeBoards() {
+  const boardA = document.getElementById('board1');
+  boardA.innerHTML = '';
+
+  const boardB = document.getElementById('board2');
+  boardB.innerHTML = '';
+}
+
+export function updateStatus(length) {
+  const infoBox = document.getElementById('info');
+  switch (length) {
+    case 5:
+      infoBox.textContent = 'Position your aircraft carrier...';
+      break;
+    case 4:
+      infoBox.textContent = 'Position your battleship...';
+      break;
+    case 3:
+      infoBox.textContent = 'Position your cruiser...';
+      break;
+    case 2:
+      infoBox.textContent = 'Position your destroyer...';
+      break;
+    case 1:
+      infoBox.textContent = 'Position your submarine...';
+      break;
+    case 0:
+      infoBox.textContent = 'Battle!';
+      break;
+    default:
+      infoBox.textContent = '';
+  }
 }

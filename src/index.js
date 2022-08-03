@@ -5,12 +5,13 @@ import {
   renderShips,
   renderAttacks,
   displayGameOver,
+  wipeBoards,
+  updateStatus,
 } from './domInteraction';
 import { gameboard } from './factories/gameboard';
 import { player } from './factories/player';
 
 let shipsPlaced = false;
-let shipLengthCounter = 5;
 
 let rotation = 'horizontal';
 const rotationBox = document.getElementById('rotation');
@@ -48,6 +49,8 @@ boardB.newShip(5, 5, 5, 'horizontal');
 makeBoard('B', 'board2');
 renderShips('B', boardB);
 
+updateStatus(boardA.newShipLength);
+
 function checkGameOver() {
   console.log(boardA.areShipsSunk(), boardB.areShipsSunk());
   console.log(boardB);
@@ -77,30 +80,11 @@ export function gameLoop() {
   }
 }
 
-function makeNewShip() {
-  const length = Number(document.getElementById('length').value);
-  const xCOORD = Number(document.getElementById('xCOORD').value);
-  const yCOORD = Number(document.getElementById('yCOORD').value);
-  const orientation = document.getElementById('orientation').value;
-  console.log(typeof length, typeof xCOORD, typeof yCOORD, typeof orientation);
-  boardA.newShip(length, xCOORD, yCOORD, orientation);
-  renderShips('A', boardA);
-  console.log(boardA.ships.length);
-
-  if (boardA.ships.length >= 5) {
-    shipsPlaced = true;
-  }
-}
-
-const newShipBtn = document.getElementById('newShipBtn');
-
 export function shipHover() {
   if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
-    // console.log('dog');
     const coordinates = this.id.split('-');
     // console.log(coordinates);
     const square = document.getElementById(this.id);
-    // square.style.backgroundColor = 'pink';
 
     const potentialCords = boardA.makeShipCoordinates(
       Number(coordinates[1]),
@@ -163,9 +147,39 @@ export function clickNewShip() {
     );
 
     renderShips('A', boardA);
+    updateStatus(boardA.newShipLength);
 
     if (boardA.ships.length >= 5) {
       shipsPlaced = true;
     }
   }
 }
+
+export function newGame() {
+  wipeBoards();
+  makeBoard('A', 'board1');
+  makeBoard('B', 'board2');
+  shipsPlaced = false;
+
+  boardA.ships = [];
+  boardA.newShipLength = 5;
+  boardA.missedShots = [];
+
+  updateStatus(boardA.newShipLength);
+
+  boardB.ships = [];
+  boardB.newShipLength = 5;
+  boardB.missedShots = [];
+
+  boardB.newShip(1, 2, 3, 'vertical');
+  boardB.newShip(2, 8, 9, 'horizontal');
+  boardB.newShip(3, 7, 2, 'horizontal');
+  boardB.newShip(4, 2, 8, 'horizontal');
+  boardB.newShip(5, 5, 5, 'horizontal');
+  renderShips('B', boardB);
+
+  console.log(boardA, boardB);
+}
+
+const resetBtn = document.getElementById('resetBtn');
+resetBtn.addEventListener('click', newGame);
