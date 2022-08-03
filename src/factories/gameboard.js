@@ -36,6 +36,53 @@ export function gameboard() {
       return false;
     },
 
+    randomShip() {
+      const newShip = ship(this.newShipLength);
+      {
+        const randomX = Math.floor(Math.random() * 10 + 1);
+        const randomY = Math.floor(Math.random() * 10 + 1);
+        const length = this.newShipLength;
+        const shipOrientation = this.randomOrientation();
+
+        newShip.coordinates = this.makeShipCoordinates(
+          randomX,
+          randomY,
+          length,
+          shipOrientation
+        );
+
+        if (this.isValidPosition(newShip.coordinates, shipOrientation)) {
+          this.ships.push(newShip);
+          this.newShipLength -= 1;
+        } else {
+          this.randomShip();
+        }
+      }
+    },
+
+    randomCoordinates() {
+      const randomX = Math.floor(Math.random() * 10 + 1);
+      const randomY = Math.floor(Math.random() * 10 + 1);
+      const length = this.newShipLength;
+      const shipOrientation = this.randomOrientation();
+
+      return this.makeShipCoordinates(
+        randomX,
+        randomY,
+        length,
+        shipOrientation
+      );
+    },
+
+    randomOrientation() {
+      const randomNumber = Math.floor(Math.random() * 10 + 1);
+
+      if (randomNumber % 2 === 0) {
+        return 'horizontal';
+      }
+      return 'vertical';
+    },
+
     // Creates array for coordinates starting at bow for given length and orientation
     makeShipCoordinates(bowX, bowY, length, orientation) {
       const shipCoordinates = [];

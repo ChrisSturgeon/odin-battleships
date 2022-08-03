@@ -29,22 +29,22 @@ rotationBtn.addEventListener('click', () => {
 
 const playerA = player();
 const boardA = gameboard();
-// boardA.newShip(1, 10, 7, 'vertical');
-// boardA.newShip(2, 4, 2, 'vertical');
-// boardA.newShip(3, 2, 5, 'vertical');
-// boardA.newShip(4, 6, 4, 'horizontal');
-// boardA.newShip(5, 2, 10, 'horizontal');
 
 makeBoard('A', 'board1');
 renderShips('A', boardA);
 
 const playerB = player();
 const boardB = gameboard();
-boardB.newShip(1, 2, 3, 'vertical');
-boardB.newShip(2, 8, 9, 'horizontal');
-boardB.newShip(3, 7, 2, 'horizontal');
-boardB.newShip(4, 2, 8, 'horizontal');
-boardB.newShip(5, 5, 5, 'horizontal');
+
+boardB.randomShip();
+boardB.randomShip();
+boardB.randomShip();
+boardB.randomShip();
+boardB.randomShip();
+// boardB.newShip(2, 8, 9, 'horizontal');
+// boardB.newShip(3, 7, 2, 'horizontal');
+// boardB.newShip(4, 2, 8, 'horizontal');
+// boardB.newShip(5, 5, 5, 'horizontal');
 
 makeBoard('B', 'board2');
 renderShips('B', boardB);
@@ -52,8 +52,6 @@ renderShips('B', boardB);
 updateStatus(boardA.newShipLength);
 
 function checkGameOver() {
-  console.log(boardA.areShipsSunk(), boardB.areShipsSunk());
-  console.log(boardB);
   if (boardA.areShipsSunk()) {
     displayGameOver('Player B');
   }
@@ -83,9 +81,6 @@ export function gameLoop() {
 export function shipHover() {
   if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
     const coordinates = this.id.split('-');
-    // console.log(coordinates);
-    const square = document.getElementById(this.id);
-
     const potentialCords = boardA.makeShipCoordinates(
       Number(coordinates[1]),
       Number(coordinates[2]),
@@ -109,11 +104,7 @@ export function shipHover() {
 
 export function unHover() {
   if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
-    // console.log('dog');
     const coordinates = this.id.split('-');
-    // console.log(coordinates);
-    const square = document.getElementById(this.id);
-    // square.style.backgroundColor = 'pink';
 
     const potentialCords = boardA.makeShipCoordinates(
       Number(coordinates[1]),
@@ -171,15 +162,15 @@ export function newGame() {
   boardB.newShipLength = 5;
   boardB.missedShots = [];
 
-  boardB.newShip(1, 2, 3, 'vertical');
-  boardB.newShip(2, 8, 9, 'horizontal');
-  boardB.newShip(3, 7, 2, 'horizontal');
-  boardB.newShip(4, 2, 8, 'horizontal');
-  boardB.newShip(5, 5, 5, 'horizontal');
+  boardB.randomShip();
+  boardB.randomShip();
+  boardB.randomShip();
+  boardB.randomShip();
+  boardB.randomShip();
   renderShips('B', boardB);
-
-  console.log(boardA, boardB);
 }
 
 const resetBtn = document.getElementById('resetBtn');
 resetBtn.addEventListener('click', newGame);
+
+console.log(boardA.randomCoordinates());
