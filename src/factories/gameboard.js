@@ -36,6 +36,7 @@ export function gameboard() {
       return false;
     },
 
+    // Creates and places random ship
     randomShip() {
       const newShip = ship(this.newShipLength);
       {
@@ -60,6 +61,7 @@ export function gameboard() {
       }
     },
 
+    // Creates random set of coordinates
     randomCoordinates() {
       const randomX = Math.floor(Math.random() * 10 + 1);
       const randomY = Math.floor(Math.random() * 10 + 1);
@@ -74,6 +76,7 @@ export function gameboard() {
       );
     },
 
+    // Returns random horizontal or vertical
     randomOrientation() {
       const randomNumber = Math.floor(Math.random() * 10 + 1);
 

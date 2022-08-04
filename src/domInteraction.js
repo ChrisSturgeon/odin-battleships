@@ -7,6 +7,7 @@ import {
   clickNewShip,
 } from './index';
 
+// Renders all ships on each board
 export function renderShips(prefix, board) {
   board.ships.forEach((ship) => {
     ship.coordinates.forEach((coordinate) => {
@@ -18,6 +19,7 @@ export function renderShips(prefix, board) {
   });
 }
 
+// Renders attackes on each board
 export function renderAttacks(prefix, board) {
   board.missedShots.forEach((missedShot) => {
     const square = document.getElementById(
@@ -36,11 +38,13 @@ export function renderAttacks(prefix, board) {
   });
 }
 
+// Displays gameover and winner in info bar
 export function displayGameOver(player) {
   const infoBox = document.getElementById('info');
   infoBox.textContent = `${player} the winner!`;
 }
 
+// Removes used boards
 export function wipeBoards() {
   const boardA = document.getElementById('board1');
   boardA.innerHTML = '';
@@ -49,6 +53,7 @@ export function wipeBoards() {
   boardB.innerHTML = '';
 }
 
+// Updates the ship which should be positioned
 export function updateStatus(length) {
   const infoBox = document.getElementById('info');
   switch (length) {
@@ -75,6 +80,7 @@ export function updateStatus(length) {
   }
 }
 
+// Displays a 'shadow' of where the new ship will be placed during positioning phase
 function shipHover() {
   const board = getBoardA();
 
@@ -101,6 +107,7 @@ function shipHover() {
   }
 }
 
+// Reverses shipHover styling when cursor changes to different coordinate
 function unHover() {
   const board = getBoardA();
   if (getShipsPlaced() === false && this.id.split('-')[0] === 'A') {
@@ -127,6 +134,7 @@ function unHover() {
   }
 }
 
+// Renders gameboard and adds required event listeners
 export function makeBoard(prefix, id) {
   const container = document.getElementById(`${id}`);
   const boardBox = document.createElement('div');
@@ -149,6 +157,7 @@ export function makeBoard(prefix, id) {
   }
 }
 
+// Displays scores once either player has won
 export function updateScores(player, computer) {
   const playerBox = document.getElementById('board1');
   const playerScore = document.createElement('h1');
@@ -169,6 +178,7 @@ export function updateScores(player, computer) {
   }
 }
 
+// Triggers ship rotation during positioning phase
 function refreshRotation() {
   rotateShip();
 }

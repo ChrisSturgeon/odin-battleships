@@ -1,249 +1,144 @@
-import { gameboard, ship } from '../src/game-logic';
+import { gameboard } from '../src/factories/gameboard';
+import { ship } from '../src/factories/ship';
 import { expect } from 'expect';
 
-test('has shipLocations array', () => {
-  expect(gameboard().hasOwnProperty('shipLocations')).toBe(true);
+// import { test } from 'picomatch';
+
+test('stores new ships in ships array', () => {
+  const testboard = gameboard();
+  testboard.newShip(3, 1, 1, 'horizontal');
+  testboard.newShip(4, 7, 7, 'vertical');
+  expect(testboard.ships.length).toBe(2);
 });
 
-test('has placeShip method', () => {
-  expect(gameboard().hasOwnProperty('placeShip')).toBe(true);
-});
+test('makes correct array of ship coordinates for horizontal orientation', () => {
+  const testboard = gameboard();
 
-test('vessel of length 1 is stored in gameboard', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(2, 4, ship('submarine', 1), 'horizontal');
-
-  expect(testBoard.shipLocations.submarine).toStrictEqual([[2, 4]]);
-});
-
-test('vessel of length 5 is stored in gameboard', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(4, 9, ship('carrier', 5), 'horizontal');
-
-  expect(testBoard.shipLocations.carrier).toStrictEqual([
-    [4, 9],
-    [5, 9],
-    [6, 9],
-    [7, 9],
-    [8, 9],
+  expect(testboard.makeShipCoordinates(1, 2, 4, 'horizontal')).toStrictEqual([
+    [1, 2],
+    [2, 2],
+    [3, 2],
+    [4, 2],
   ]);
 });
 
-test('createHorizontalArray works (1)', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.createShipPositions(4, 9, ship('cruiser', 3), 'horizontal')
-  ).toStrictEqual = [
-    [4, 9],
-    [5, 0],
-    [6, 9],
-  ];
-});
+test('makes correct array of ship coordinates for vertical orientation', () => {
+  const testboard = gameboard();
 
-test('createHorizontalArray  works (2)', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.createShipPositions(6, 4, ship('destroyer', 2), 'horizontal')
-  ).toStrictEqual = [
-    [6, 4],
-    [7, 4],
-  ];
-});
-
-test('createVerticalArray works (1)', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.createShipPositions(2, 5, ship('cruiser', 3), 'vertical')
-  ).toStrictEqual([
-    [2, 5],
-    [2, 6],
-    [2, 7],
+  expect(testboard.makeShipCoordinates(5, 5, 3, 'vertical')).toStrictEqual([
+    [5, 5],
+    [5, 6],
+    [5, 7],
   ]);
 });
 
-test('createVerticalArray works (2)', () => {
-  const testBoard = gameboard();
+test('isWithinGrid returns true if ship coordinates are horizontally within 10 x 10 grid', () => {
+  const testboard = gameboard();
+
   expect(
-    testBoard.createShipPositions(10, 6, ship('carrier', 5), 'vertical')
-  ).toStrictEqual([
-    [10, 6],
-    [10, 7],
-    [10, 8],
-    [10, 9],
-    [10, 10],
-  ]);
-});
-
-test('placeShip stores coordinates of single new vessel', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(4, 1, ship('cruiser', 3), 'horizontal');
-
-  expect(Object.values(testBoard.shipLocations).length).toBe(1);
-});
-
-test('occupiedCords method returns correct array', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(1, 1, ship('destroyer', 2), 'horizontal');
-  testBoard.placeShip(1, 9, ship('submarine', 1), 'horizontal');
-
-  expect(testBoard.occupiedCords()).toStrictEqual([
-    [1, 1],
-    [2, 1],
-    [1, 9],
-  ]);
-});
-
-test('checkCordVacant returns true if square vacant ', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
-  testBoard.placeShip(7, 2, ship('cruiser', 3), 'horizontal');
-  testBoard.placeShip(8, 9, ship('destroyer', 2), 'horizontal');
-  testBoard.placeShip(2, 3, ship('submarine', 1), 'horizontal');
-
-  expect(testBoard.checkCordVacant(6, 8)).toBe(true);
-});
-
-test('checkCordVacant returns false if square occupied ', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
-  testBoard.placeShip(7, 2, ship('cruiser', 3), 'horizontal');
-  testBoard.placeShip(8, 9, ship('destroyer', 2), 'horizontal');
-  testBoard.placeShip(2, 3, ship('submarine', 1), 'horizontal');
-
-  expect(testBoard.checkCordVacant(8, 9)).toBe(false);
-});
-
-test('checkNoOverFlow returns true with valid ship', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.checkNoOverFlow(
+    testboard.isWithinGrid(
       [
-        [7, 2],
-        [8, 2],
-        [9, 2],
-      ],
-      'horizontal'
-    )
-  ).toBe(true);
-});
-
-test('checkNoOverFlow horizontal returns false with bow outside grid', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.checkNoOverFlow(
-      [
-        [0, 2],
         [1, 2],
-        [2, 2],
+        [3, 2],
+        [4, 2],
+        [5, 2],
+        [6, 2],
       ],
       'horizontal'
     )
-  ).toBe(false);
+  ).toBe(true);
 });
 
-test('checkNoOverFlow horizontal returns false with stern outside grid', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.checkNoOverFlow(
-      [
-        [9, 2],
-        [10, 2],
-        [11, 2],
-      ],
-      'horizontal'
-    )
-  ).toBe(false);
-});
+test('isWithinGrid returns true if ship coordinates are vertically within 10 x 10 grid', () => {
+  const testboard = gameboard();
 
-test('checkNoOverFlow vertical returns true with a valid ship', () => {
-  const testBoard = gameboard();
   expect(
-    testBoard.checkNoOverFlow(
+    testboard.isWithinGrid(
       [
-        [3, 5],
-        [3, 6],
-        [3, 7],
+        [1, 2],
+        [2, 3],
+        [2, 4],
+        [2, 5],
+        [2, 6],
       ],
       'vertical'
     )
   ).toBe(true);
 });
 
-test('checkNoOverFlow vertical returns false with bow outside grid', () => {
-  const testBoard = gameboard();
+test('isWithinGrid returns false if ship coordinates are horizontally outside 10 x 10 grid', () => {
+  const testboard = gameboard();
+
   expect(
-    testBoard.checkNoOverFlow(
+    testboard.isWithinGrid(
       [
-        [5, 0],
-        [5, 1],
-        [5, 2],
+        [8, 8],
+        [9, 8],
+        [10, 8],
+        [11, 8],
+      ],
+      'horizontal'
+    )
+  ).toBe(false);
+});
+
+test('isWithinGrid returns false if ship coordinates are vertically outside 10 x 10 grid', () => {
+  const testboard = gameboard();
+
+  expect(
+    testboard.isWithinGrid(
+      [
+        [7, 8],
+        [7, 9],
+        [7, 10],
+        [7, 11],
       ],
       'vertical'
     )
   ).toBe(false);
 });
 
-test('checkNoOverFlow vertical returns false with stern outside grid', () => {
-  const testBoard = gameboard();
-  expect(
-    testBoard.checkNoOverFlow(
-      [
-        [5, 9],
-        [5, 10],
-        [5, 11],
-      ],
-      'vertical'
-    )
-  ).toBe(false);
-});
+test('newShip method sets correct ship coordinates', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 1, 2, 'horizontal');
 
-test('placeShip stores single vertical ship', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(2, 4, ship('cruiser', 3), 'vertical');
-  expect(testBoard.shipLocations.cruiser).toStrictEqual([
-    [2, 4],
-    [2, 5],
-    [2, 6],
+  expect(testboard.ships[0].coordinates).toStrictEqual([
+    [1, 2],
+    [2, 2],
+    [3, 2],
+    [4, 2],
   ]);
 });
 
-test('placeShip rejects ships outside the grid horizontally', () => {
-  const testBoard = gameboard();
-  expect(() => {
-    testBoard.placeShip(10, 10, ship('carrier', 5), 'horizontal');
-  }).toThrow();
+test('isCoordAvailable returns true for available coordinate', () => {
+  const testboard = gameboard();
+
+  expect(testboard.isCoordAvailable([2, 5])).toBe(true);
 });
 
-test('placeShip rejects ships outside the grid vertically', () => {
-  const testBoard = gameboard();
-  expect(() => {
-    testBoard.placeShip(6, 8, ship('carrier', 5), 'vertical');
-  }).toThrow();
+test('isCoordAvailable returns false for occupied coordinate', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+
+  expect(testboard.isCoordAvailable([5, 5])).toBe(false);
 });
 
-test('isSpaceAvailable returns true with available spaces', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
-
+test('isSpaceAvailable returns true if all coordinates are available', () => {
+  const testboard = gameboard();
   expect(
-    testBoard.isSpaceAvailable([
-      [1, 1],
-      [2, 1],
-      [3, 1],
+    testboard.isSpaceAvailable([
+      [1, 2],
+      [1, 3],
+      [1, 4],
     ])
   ).toBe(true);
 });
 
-test('isSpaceAvailable returns false with occupied spaces', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
-
+test('isSpaceAvailable returns false if a coordinate is already occupied', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
   expect(
-    testBoard.isSpaceAvailable([
+    testboard.isSpaceAvailable([
       [6, 4],
       [6, 5],
       [6, 6],
@@ -251,23 +146,82 @@ test('isSpaceAvailable returns false with occupied spaces', () => {
   ).toBe(false);
 });
 
-test('board stores multiple ships', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
-  testBoard.placeShip(7, 2, ship('cruiser', 3), 'horizontal');
-  testBoard.placeShip(8, 9, ship('destroyer', 2), 'horizontal');
-  testBoard.placeShip(2, 3, ship('submarine', 1), 'horizontal');
-
-  expect(Object.keys(testBoard.shipLocations).length).toBe(5);
+test('newShip method throws error if desired position is outside the grid', () => {
+  const testboard = gameboard();
+  expect(() => {
+    testboard.newShip(5, 8, 1, 'horizontal');
+  }).toThrow();
 });
 
-test('throws error if new ship overlaps existing ship', () => {
-  const testBoard = gameboard();
-  testBoard.placeShip(5, 5, ship('carrier', 5), 'horizontal');
-  testBoard.placeShip(2, 8, ship('battleship', 4), 'horizontal');
+test('newShip method throws error if a coordinate is already occupied', () => {
+  const testboard = gameboard();
+
+  testboard.newShip(4, 5, 5, 'horizontal');
 
   expect(() => {
-    testBoard.placeShip(7, 4, ship('cruiser', 3), 'vertical');
+    testboard.newShip(5, 6, 4, 'vertical');
   }).toThrow();
+});
+
+test('receiveAttack method finds triggers ship hit when ship at given coordinate', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+  testboard.receieveAtttack([5, 5]);
+
+  expect(testboard.ships[0].hitLocations).toStrictEqual([[5, 5]]);
+});
+
+test('receiveAttack method records missed shots', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+  testboard.receieveAtttack([1, 1]);
+  testboard.receieveAtttack([10, 10]);
+  testboard.receieveAtttack([8, 9]);
+
+  expect(testboard.missedShots).toStrictEqual([
+    [1, 1],
+    [10, 10],
+    [8, 9],
+  ]);
+});
+
+test('ships return as sunk once length has been reached', () => {
+  const testboard = gameboard();
+  testboard.newShip(4, 5, 5, 'horizontal');
+  testboard.receieveAtttack([5, 5]);
+  testboard.receieveAtttack([6, 5]);
+  testboard.receieveAtttack([7, 5]);
+  testboard.receieveAtttack([8, 5]);
+
+  expect(testboard.ships[0].isSunk()).toBe(true);
+});
+
+test('are ships sunk returns true if all ships on the board have been sunk', () => {
+  const testboard = gameboard();
+  testboard.newShip(2, 1, 1, 'horizontal');
+  testboard.newShip(2, 5, 5, 'vertical');
+  testboard.newShip(2, 7, 7, 'vertical');
+
+  testboard.receieveAtttack([1, 1]);
+  testboard.receieveAtttack([2, 1]);
+  testboard.receieveAtttack([5, 5]);
+  testboard.receieveAtttack([5, 6]);
+  testboard.receieveAtttack([7, 7]);
+  testboard.receieveAtttack([7, 8]);
+
+  expect(testboard.areShipsSunk()).toBe(true);
+});
+
+test('are ships sunk returns false if not all ships on the board have been sunk', () => {
+  const testboard = gameboard();
+  testboard.newShip(2, 1, 1, 'horizontal');
+  testboard.newShip(2, 5, 5, 'vertical');
+  testboard.newShip(2, 7, 7, 'vertical');
+
+  testboard.receieveAtttack([1, 1]);
+  testboard.receieveAtttack([2, 1]);
+  testboard.receieveAtttack([5, 5]);
+  testboard.receieveAtttack([5, 6]);
+
+  expect(testboard.areShipsSunk()).toBe(false);
 });

@@ -1,5 +1,4 @@
 import './style.css';
-
 import {
   makeBoard,
   renderShips,
@@ -13,7 +12,6 @@ import { gameboard } from './factories/gameboard';
 import { player } from './factories/player';
 
 let shipsPlaced = false;
-
 let rotation = 'horizontal';
 
 // Toggles new ship orientation as horizontal or vertical
@@ -30,18 +28,7 @@ const playerB = player();
 const boardA = gameboard();
 const boardB = gameboard();
 
-// makeBoard('A', 'board1');
-// renderShips('A', boardA);
-
-// boardB.randomShip();
-// boardB.randomShip();
-// boardB.randomShip();
-// boardB.randomShip();
-// boardB.randomShip();
-
-// makeBoard('B', 'board2');
-// renderShips('B', boardB);
-
+// Checks if ships on either board have all been sunk and triggers game-end msg
 function checkGameOver() {
   if (boardA.areShipsSunk()) {
     displayGameOver('The Computer is');
@@ -56,6 +43,7 @@ function checkGameOver() {
   }
 }
 
+// Main game loop
 export function gameLoop() {
   if (shipsPlaced === true) {
     const coordinates = this.id.split('-');
@@ -85,6 +73,7 @@ export function getRotation() {
   return rotation;
 }
 
+// Allows player to click and place new ship on their board
 export function clickNewShip() {
   if (shipsPlaced === false && this.id.split('-')[0] === 'A') {
     const coordinates = this.id.split('-');
@@ -104,6 +93,7 @@ export function clickNewShip() {
   }
 }
 
+// Resets all stats to initial and creates random placement of five new enemy ships on board
 export function newGame() {
   wipeBoards();
   updateScores(playerA, playerB);
